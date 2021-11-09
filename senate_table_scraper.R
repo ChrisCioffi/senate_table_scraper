@@ -41,9 +41,26 @@ full_table <- left_join(votes_with_dates, congress_party, year=year)
 
 #Now I've grouped by the majority party and the Congress and gotten the mean number of roll call votes?
 
-summary_data <- full_table  %>%
+votes_by_congress <- full_table  %>%
   group_by(majority_party, congress) %>%
   summarise(mean = mean(as.integer(`Roll Call Votes`)))
+
+#average votes per vote-a-rama when democrats/republicans are in control
+party_votes <- full_table  %>%
+  group_by(majority_party) %>%
+  summarise(mean = mean(as.integer(`Roll Call Votes`)))
+
+#total number of vote a rama when democrats/republicans are in control
+total_ramas <- full_table  %>%
+  group_by(majority_party, decade) %>%
+  summarise(count = n())
+
+#has the number of vote-a-ramas gone up since 1977?
+
+decade_ramas  <- full_table  %>%
+  group_by(decade) %>%
+  summarise(count = n())
+
 
 
 #and let's graph the thing for good measure https://www.r-graph-gallery.com/connected_scatterplot_ggplot2.html
@@ -51,7 +68,11 @@ summary_data <- full_table  %>%
 
 # plot
 
-  ggplot(summary_data, aes(x=congress, y=mean, color=majority_party)) +
-  geom_bar(stat="identity", fill="white") +
-  scale_fill_manual( values = c("D" = "black", "D/R" = "orange", "R" = "blue"))
+  # Assigning colors manually https://www.geeksforgeeks.org/change-color-of-bars-in-barchart-using-ggplot2-in-r/
+  perf <-ggplot(data=summary_data, aes(x=congress, y=mean,fill=majority_party))+
+    geom_bar(stat="identity") +
+    scale_fill_manual(values=c("darkblue",
+                               "green",
+                               "red"))
+  perf
 
