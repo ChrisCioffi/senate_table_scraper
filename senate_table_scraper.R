@@ -52,7 +52,7 @@ party_votes <- full_table  %>%
 
 #total number of vote a rama when democrats/republicans are in control
 total_ramas <- full_table  %>%
-  group_by(majority_party, decade) %>%
+  group_by(majority_party) %>%
   summarise(count = n())
 
 #has the number of vote-a-ramas gone up since 1977?
@@ -61,12 +61,15 @@ decade_ramas  <- full_table  %>%
   group_by(decade) %>%
   summarise(count = n())
 
+avg_decade_ramas  <- full_table  %>%
+  group_by(decade) %>%
+  summarise(mean = mean(as.integer(`Roll Call Votes`)))
 
 
 #and let's graph the thing for good measure https://www.r-graph-gallery.com/connected_scatterplot_ggplot2.html
 
 
-# plot
+# plot, by congress, which average vote-a-rama is the longest
 
   # Assigning colors manually https://www.geeksforgeeks.org/change-color-of-bars-in-barchart-using-ggplot2-in-r/
   perf <-ggplot(data=summary_data, aes(x=congress, y=mean,fill=majority_party))+
@@ -75,4 +78,13 @@ decade_ramas  <- full_table  %>%
                                "green",
                                "red"))
   perf
+
+  #plot by party, which held the most vote-a-ramas
+  
+  perf2 <-ggplot(data=summary_data, aes(x=congress, y=mean,fill=majority_party))+
+    geom_bar(stat="identity") +
+    scale_fill_manual(values=c("darkblue",
+                               "green",
+                               "red"))
+  perf2
 
