@@ -7,13 +7,13 @@ library(janitor)
 #Using tutorial found here https://cran.r-project.org/web/packages/rvest/vignettes/rvest.html to try to pull html from the senate website and then break out the table elements
 
 #pull in html from senate website I want to scrape  
-html <- read_html("https://www.senate.gov/legislative/Votearama1977present.htm")
+html <- read_html("https://www.justice.gov/usao-dc/capitol-breach-cases")
 class(html)
 
 # Identify the information stored in a <table> tag and put it into a data.frame 
 vote_a_rama_table <- html %>% 
   html_node("table") %>% 
-  html_table() %>%
+  html_table() #%>%
   #uses the janitor package to set the top row, as column names  -- for whatever reason the html_table( header = TRUE) just wasn't working. Probably user error.
   row_to_names(row_number = 1)
 
@@ -79,6 +79,7 @@ avg_decade_ramas  <- full_table  %>%
                                "red"))
   perf
 
+<<<<<<< Updated upstream
   #plot by party, which held the most vote-a-ramas
   
   perf2 <-ggplot(data=summary_data, aes(x=congress, y=mean,fill=majority_party))+
@@ -88,3 +89,6 @@ avg_decade_ramas  <- full_table  %>%
                                "red"))
   perf2
 
+=======
+write_csv(vote_a_rama_table, "capitol_breach_arrests.csv")
+>>>>>>> Stashed changes
